@@ -28,6 +28,7 @@ class User extends Authenticatable
         'title',
         'birthday',
         'password',
+        'last_login_at',
     ];
 
     /**
@@ -53,8 +54,25 @@ class User extends Authenticatable
         ];
     }
 
+    
+    /**
+     * Get the user's details.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne<UserDetails>
+     */
     public function details()
     {
         return $this->hasOne(UserDetails::class);
+    }
+
+    
+    /**
+     * Scope a query to only include users of a given email.
+     *
+     * @param  string  $email
+     */
+    public function scopeEmail($query, string $email)
+    {
+        return $query->where('email', $email);
     }
 }

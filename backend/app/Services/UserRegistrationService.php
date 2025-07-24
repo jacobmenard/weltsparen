@@ -225,6 +225,11 @@ class UserRegistrationService
             'data' => json_encode($data),
         ]);
 
+        // check if email already exists
+        if (User::email($details['email'])->exists()) {
+            return $this->apiResponse(['errors' => ['email' => __('common.exists', ['field' => 'Email'])]], false, 422);
+        }
+
         // save user
         $user = $this->createUser($regToken->token);
 

@@ -20,4 +20,17 @@ class ApiController extends Controller
             'description' => env('APP_NAME'),
         ]);
     }
+
+    /**
+     * Handle invalid API requests.
+     *
+     * This method returns a JSON response indicating that the request
+     * was invalid, along with an appropriate error message and status code.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function invalidRequest()
+    {
+        return response()->json([ 'success' => false, 'data' => ['message' => __('common.invalid-request') . ' / ' . __('common.invalid-method')], ], 404);
+    }
 }
