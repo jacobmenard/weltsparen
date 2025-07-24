@@ -1,0 +1,10 @@
+
+
+// mixin for fonts
+@mixin font-custom($s, $lh, $w, $c) {
+    font-size: $s !important;
+    line-height: $lh !important; 
+    font-weight: $w !important;
+    color: $c !important;
+    @content;
+}

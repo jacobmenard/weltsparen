@@ -1,0 +1,55 @@
+
+// mixin media queries
+@mixin laptop {
+    @media screen and (min-width: 993px) and (max-width: 1320px) {
+        @content;
+    }
+}
+
+@mixin tablet {
+    @media screen and (min-width: 768) and (max-width: 992px) {
+        @content;
+    }
+}
+
+@mixin mobile-lg {
+    @media screen and (max-width: 530px) {
+        @content;
+    }
+}
+
+@mixin mobile-md {
+    @media screen and (max-width: 400px) {
+        @content;
+    }
+}
+
+@mixin mobile-sm {
+    @media screen and (max-width: 320px) {
+        @content;
+    }
+}
+
+@mixin high-resolution {
+    @media screen and (min-width: 1921px) {
+        @content;
+    }
+}
+
+@mixin mid-resolution {
+    @media screen and (min-width: 1680px) {
+        @content;
+    }
+}
+
+@mixin resolution($resolution) {
+    @media screen and (max-width: $resolution) {
+        @content;
+    }
+}
+
+@mixin height-resolution($resolution) {
+    @media screen and (max-height: $resolution) {
+        @content;
+    }
+}

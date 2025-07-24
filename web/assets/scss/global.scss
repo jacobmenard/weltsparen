@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+
+body {
+    font-family: "Outfit", sans-serif !important;
+    background-color: $bg !important;
+}
+
+$borderRadiusList: (0, 5, 10, 20, 30, 100);
+@each $borderRadius in $borderRadiusList {
+    .border-radius-#{$borderRadius} { border-radius: #{$borderRadius}px !important; }
+}
+
+$borderList: (1, 2, 3);
+@each $border in $borderList {
+    .border-red-#{$border} { border: #{$border}px solid $red1 !important; }
+
+    .border-black-#{$border} { border: #{$border}px solid $black2 !important; }
+
+    .border-black1-#{$border} { border: #{$border}px solid $black4 !important; }
+    .border-bottom-black1-#{$border} { border-bottom: #{$border}px solid $black4 !important; }
+    
+    .border-white1-#{$border} { border: #{$border}px solid $white1 !important; }
+    
+}
+
+$gapList: (4, 5, 10, 11, 13, 16, 18, 20, 22, 25, 30, 32, 40, 48, 50, 55, 60, 100, 115, 130, 177, 230);
+@each $gap in $gapList {
+    .gap-#{$gap} { gap: #{$gap}px !important; }
+}
+
+// display header
+$displayHeader: (18, 36, 48, 72, 128, 155);
+@each $dis in $displayHeader {
+    .display-header-#{$dis} { 
+        font-size: #{$dis}px !important; 
+        line-height: #{$dis}px !important;
+    }
+}
+
+$fontweightList: (100, 200, 300, 400, 500, 600, 700, 800, 900);
+@each $fw in $fontweightList {
+    .font-weight-#{$fw} { 
+        font-weight: #{$fw} !important;
+    }
+}
+
+$maxWidthList: (50, 60, 100, 150, 200, 250, 350, 480, 500, 600, 700, 800, 1020, 1100, 1200);
+@each $mw in $maxWidthList {
+    .max-width-#{$mw} { max-width: #{$mw}px !important; }
+    .max-height-#{$mw} { max-height: #{$mw}px !important; }
+    .min-height-#{$mw} { min-height: #{$mw}px !important; }
+    .width-#{$mw} { width: #{$mw}px !important; }
+    .height-#{$mw} { height: #{$mw}px !important; }
+}
+
+$sizeList: (0, 5, 8, 10, 13, 16, 20, 25, 27, 25, 30, 40, 45, 50, 60);
+@each $size in $sizeList {
+    .margin-bottom-#{$size} { margin-bottom: #{$size}px !important; }
+    .margin-top-#{$size} { margin-top: #{$size}px !important; }
+    .margin-left-#{$size} { margin-left: #{$size}px !important; }
+    .margin-right-#{$size} { margin-right: #{$size}px !important; }
+    
+    .padding-bottom-#{$size} { padding-bottom: #{$size}px !important; }
+    .padding-top-#{$size} { padding-top: #{$size}px !important; }
+    .padding-left-#{$size} { padding-left: #{$size}px !important; }
+    .padding-right-#{$size} { padding-right: #{$size}px !important; }
+    
+    .p-x-#{$size} { padding-left: #{$size}px !important; padding-right: #{$size}px !important; }
+    .p-y-#{$size} { padding-top: #{$size}px !important; padding-bottom: #{$size}px !important; }
+    
+    .m-x-#{$size} { margin: #{$size}px !important; margin-right: #{$size}px !important; }
+    .m-y-#{$size} { margin-top: #{$size}px !important; margin-bottom: #{$size}px !important; }
+    
+    .margin-all-#{$size} { margin: #{$size}px !important; }
+    .padding-all-#{$size} { padding: #{$size}px !important; }
+    
+}
+
+.truncate {
+    word-wrap: break-word;
+    -webkit-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+    display: -moz-box !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical;
+    box-orient: vertical;
+    white-space: normal;
+    overflow: hidden;
+    &.truncate {
+        &--4 {
+            -webkit-line-clamp: 4;
+            -moz-line-clamp: 4;
+            line-clamp: 4;
+        }
+        &--3 {
+            -webkit-line-clamp: 3;
+            -moz-line-clamp: 3;
+            line-clamp: 3;
+        }
+        &--2 {
+            -webkit-line-clamp: 2;
+            -moz-line-clamp: 2;
+            line-clamp: 2;
+        }
+        &--1 {
+            -webkit-line-clamp: 1;
+            -moz-line-clamp: 1;
+            line-clamp: 1;
+        }
+    }
+}
+
+.Toastify__toast-body  {
+    font-family: "Outfit", sans-serif !important;
+}
