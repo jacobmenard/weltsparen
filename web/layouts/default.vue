@@ -7,9 +7,9 @@
 
         <layout-header></layout-header>
 
-        <b-container class="main-default-container">
+        <div class="main-default-container">
             <slot></slot>
-        </b-container>
+        </div>
 
 
         <layout-footer></layout-footer>

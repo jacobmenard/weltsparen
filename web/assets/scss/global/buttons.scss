@@ -1,0 +1,32 @@
+
+.btn {
+    transition: 0.3s;
+    &-w-primary {
+        @include font-custom(16px, normal, 700, $white1) {
+            border-radius: 5px;
+            padding: 13px 24px !important;
+            background-color: $blue1 !important;
+            border: 1px solid $blue1 !important;
+        }
+
+        &:hover {
+            background-color: $blue2 !important;
+            border: 1px solid $blue2 !important;
+
+        }
+    }
+
+    &-w-default {
+        @include font-custom(16px, normal, 700, $blue1) {
+            border-radius: 5px;
+            padding: 13px 24px !important;
+            background-color: $white1 !important;
+            border: 1px solid $blue1 !important;
+        }
+
+        &:hover {
+            border: 1px solid $blue2 !important;
+            color: $blue2 !important;
+        }
+    }
+}

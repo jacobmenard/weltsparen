@@ -20,6 +20,7 @@ export default defineNuxtConfig({
   modules: ['@bootstrap-vue-next/nuxt', '@nuxt/image'],
   css: [
     '@/assets/scss/global.scss',
+    '@/assets/scss/global/buttons.scss',
     'bootstrap/dist/css/bootstrap.min.css'
   ],
   vite: {
