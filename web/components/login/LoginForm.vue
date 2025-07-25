@@ -47,7 +47,7 @@ const onSubmit = handleSubmit((values) => {
         </div>
 
         <!-- Password -->
-        <div class="mb-4">
+        <div class="mb-2">
           <div class="position-relative">
             <input
                 id="password"
