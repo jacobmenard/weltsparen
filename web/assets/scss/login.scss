@@ -109,6 +109,27 @@ body {
   font-size: 1rem;
 }
 
+/* Keep border neutral unless there's an error */
+.form-control {
+  border: 1px solid #ced4da;
+  box-shadow: none;
+  transition: border-color 0.2s ease-in-out;
+}
+
+/* When invalid */
+.form-control.is-invalid {
+  border-color: #e63946 !important; /* Use your custom color */
+  box-shadow: none;
+}
+
+/* Error text */
+.invalid-feedback {
+  font-size: 0.8rem;
+  color: #e63946; /* Custom error color */
+  margin-top: 4px;
+}
+
+
 .jrsyPi {
   font-family: "Open Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-stretch: normal;

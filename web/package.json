@@ -15,8 +15,10 @@
     "bootstrap": "^5.3.7",
     "bootstrap-vue-next": "^0.30.4",
     "nuxt": "^3.17.7",
+    "vee-validate": "^4.15.1",
     "vue": "^3.5.17",
-    "vue-router": "^4.5.1"
+    "vue-router": "^4.5.1",
+    "yup": "^1.6.1"
   },
   "devDependencies": {
     "sass-embedded": "^1.89.2"

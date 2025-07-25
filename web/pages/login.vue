@@ -13,7 +13,7 @@ definePageMeta({
 <style scoped>
 .login-wrapper {
   width: 100%;
-  max-width: 420px;
+  max-width: 480px;
 }
 </style>
 
