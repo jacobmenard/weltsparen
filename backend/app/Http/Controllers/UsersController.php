@@ -18,7 +18,7 @@ class UsersController extends Controller
      * 
      * User login
      * @group Users
-     * @bodyParam email string required User email
+     * @bodyParam email string required User email address.
      * @bodyParam password string required User password. No-example
      * @response { "success": true, "data": ... }
      */
@@ -49,6 +49,7 @@ class UsersController extends Controller
      * User logout
      * @group Users
      * @header Authorization Bearer 34|QuEKf9WXXVEujNztucGY0ArHVoHBLRIOGNCVcItY9e5bc39b
+     * @header Accept required application/json
      * @response { "success": true, "data": ... }
      */
     public function logout(Request $request)
@@ -73,7 +74,7 @@ class UsersController extends Controller
         $countries = \App\Models\Countries::all()->pluck('name', 'cca2');
         $token = 'reg-' . \Str::random(64);
 
-        return $this->apiResponse(['translations' => __('user-registration'), 'countries' => $countries, 'reg_token' => $token], true, 200);
+        return $this->apiResponse(['translations' => __('user.registration'), 'countries' => $countries, 'reg_token' => $token], true, 200);
     }
 
 
