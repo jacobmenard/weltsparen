@@ -34,7 +34,7 @@ const onSubmit = (e: Event) => {
 
         <!-- Forgot Password -->
         <div class="mb-4">
-          <NuxtLink to="#" class="small text-decoration-none">
+          <NuxtLink to="#" class="small text-decoration-none gMbXYi">
             Passwort vergessen <span class="ms-1">›</span>
           </NuxtLink>
         </div>
