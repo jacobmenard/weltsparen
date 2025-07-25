@@ -23,11 +23,12 @@ class ApiController extends Controller
 
     /**
      * Handle invalid API requests.
-     *
+     * 
      * This method returns a JSON response indicating that the request
      * was invalid, along with an appropriate error message and status code.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @urlParam catchall string Catchall parameter is not used. No-example.
+     * @group Common
+     * @response { "success": false, "data": {...} }
      */
     public function invalidRequest()
     {

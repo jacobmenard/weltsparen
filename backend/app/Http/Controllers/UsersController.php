@@ -13,6 +13,15 @@ class UsersController extends Controller
 {
     use ApiResponseTrait;
 
+    /**
+     * Users - Login
+     * 
+     * User login
+     * @group Users
+     * @bodyParam email string required User email
+     * @bodyParam password string required User password. No-example
+     * @response { "success": true, "data": ... }
+     */
     public function login(Request $request)
     {
 
@@ -34,6 +43,14 @@ class UsersController extends Controller
         return $this->apiResponse(['errors' => ['auth' => __('common.invalid-credentials')]], false, 401);
     }
 
+    /**
+     * Users - Logout
+     * 
+     * User logout
+     * @group Users
+     * @header Authorization Bearer 34|QuEKf9WXXVEujNztucGY0ArHVoHBLRIOGNCVcItY9e5bc39b
+     * @response { "success": true, "data": ... }
+     */
     public function logout(Request $request)
     {
         $request->user()->currentAccessToken()->delete();
@@ -41,6 +58,16 @@ class UsersController extends Controller
         return $this->apiResponse(['message' => __('common.success-logout')], true, 200);
     }
 
+    /**
+     * Registration (Configuration)
+     * 
+     * All needed data, form details, field options for user registration form
+     * @group Registration
+     * @responseField data.translations Translations for user registration form
+     * @responseField data.countries Countries country field options
+     * @responseField data.reg_token Registration token needed for registration steps
+     * @response { "success": true, "data": ... }
+     */
     public function registrationConfig(Request $request)
     {
         $countries = \App\Models\Countries::all()->pluck('name', 'cca2');
@@ -49,6 +76,18 @@ class UsersController extends Controller
         return $this->apiResponse(['translations' => __('user-registration'), 'countries' => $countries, 'reg_token' => $token], true, 200);
     }
 
+
+    /**
+     * Registration (Multi-Steps)
+     * 
+     * Actual registration process (Step 1-5)
+     * @group Registration
+     * @bodyParam step integer required The step of the registration process. Example: 2
+     * @bodyParam email string required (Required in Step 1) User email
+     * @responseField next_step Indicates the next step or the next form to be shown
+     * @responseField token Registration token needed for registration steps
+     * @response { "success": true, "data": { "next_step": ... , "token": ...} }
+     */
     public function register(Request $request)
     {
         $registrationService = new UserRegistrationService();

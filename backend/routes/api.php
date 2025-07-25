@@ -18,7 +18,7 @@ Route::post('/users/register',                                      [UsersContro
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users/logout',                                    [UsersController::class, 'logout']);
 
-    Route::get('/user',                                             [UsersController::class, 'user']);
+    // Route::get('/user',                                             [UsersController::class, 'user']);
 
 });
 
