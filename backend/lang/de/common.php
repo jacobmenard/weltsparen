@@ -24,4 +24,6 @@ return [
     'select_a'                          => 'Please select a :field.',
     'select_your'                       => 'Please select your :field.',
     'provide_your'                      => 'Please provide your :field.',
+    'verification-code'                 => 'Your verification code is: :code',
+    'invalid-verification-code'         => 'Invalid mobile verification code.',
 ];

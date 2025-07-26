@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class UsersRegistrations extends Model
 {
@@ -24,5 +25,13 @@ class UsersRegistrations extends Model
     public function scopeRegToken($query, $token)
     {
         return $query->where('token', $token);
+    }
+
+    /**
+     * Get all SMS messages for the user.
+     */
+    public function smsMessages(): MorphMany
+    {
+        return $this->morphMany(SmsMessages::class, 'smsable');
     }
 }

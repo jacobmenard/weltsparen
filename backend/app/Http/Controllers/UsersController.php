@@ -18,6 +18,7 @@ class UsersController extends Controller
      * 
      * User login
      * @group Users
+     * @subgroup Authentication
      * @bodyParam email string required User email address.
      * @bodyParam password string required User password. No-example
      * @response { "success": true, "data": ... }
@@ -48,6 +49,7 @@ class UsersController extends Controller
      * 
      * User logout
      * @group Users
+     * @subgroup Authentication
      * @header Authorization Bearer 34|QuEKf9WXXVEujNztucGY0ArHVoHBLRIOGNCVcItY9e5bc39b
      * @header Accept required application/json
      * @response { "success": true, "data": ... }
@@ -63,7 +65,8 @@ class UsersController extends Controller
      * Registration (Configuration)
      * 
      * All needed data, form details, field options for user registration form
-     * @group Registration
+     * @group Users
+     * @subgroup Registration
      * @responseField data.translations Translations for user registration form
      * @responseField data.countries Countries country field options
      * @responseField data.reg_token Registration token needed for registration steps
@@ -82,7 +85,8 @@ class UsersController extends Controller
      * Registration (Multi-Steps)
      * 
      * Actual registration process (Step 1-5)
-     * @group Registration
+     * @group Users
+     * @subgroup Registration
      * @bodyParam step integer required The step of the registration process. Example: 2
      * @bodyParam email string required (Required in Step 1) User email
      * @responseField next_step Indicates the next step or the next form to be shown
@@ -96,16 +100,20 @@ class UsersController extends Controller
         $step = $request->input('step', '1');
 
         switch ($step) {
-            case '1':
+            case '1': // Email
                 return $registrationService->handleStep1($request);
-            case '2':
+            case '2': // Personal information
                 return $registrationService->handleStep2($request);
-            case '3':
+            case '3': // Contact details
                 return $registrationService->handleStep3($request);
-            case '4':
+            case '4': // Further details
                 return $registrationService->handleStep4($request);
-            case '5':
+            case '5': // Almost there!
                 return $registrationService->handleStep5($request);
+            case '6': // Verification
+                return $registrationService->handleStep6($request);
+            case '7': // Password / Complete
+                return $registrationService->handleStep7($request);
             default:
                 return $this->apiResponse(['errors' => ['message' => __('common.invalid-request')]], false, 422);
         }
