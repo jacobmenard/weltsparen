@@ -1,8 +1,10 @@
 <template>
   <div class="login-layout d-flex flex-column min-vh-100">
     <!-- Header -->
-    <header class="border-bottom bg-white py-3 px-3">
-      <img src="/Logo_Raisin_homepage.svg" alt="WeltSparen" height="24" />
+    <header class="login-header border-bottom bg-white">
+      <div class="container-header">
+        <img src="/Logo_Raisin_homepage.svg" alt="WeltSparen" height="24" />
+      </div>
     </header>
 
     <!-- Main content (centered between header & footer) -->
@@ -12,8 +14,11 @@
 
     <!-- Footer -->
     <footer class="border-top bg-white">
-      <LoginFooter />
+      <div class="w-100 d-flex justify-content-center">
+        <LoginFooter />
+      </div>
     </footer>
+
   </div>
 </template>
 

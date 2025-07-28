@@ -19,8 +19,8 @@ function handleLanguageClick() {
         <li><NuxtLink to="/it-sicherheit/">IT-Sicherheit</NuxtLink></li>
         <li><NuxtLink to="/agb/">AGB</NuxtLink></li>
         <li><NuxtLink to="#uc-corner-modal-show">Datenschutzeinstellungen</NuxtLink></li>
-        <li class="company">© 2025 Raisin SE, Berlin</li>
       </ul>
+      <p class="copyright">© 2025 Raisin SE, Berlin</p>
     </div>
 
     <div class="footer-right">
@@ -718,5 +718,10 @@ function handleLanguageClick() {
     </div>
   </footer>
 </template>
+
 <script setup lang="ts">
 </script>
+
+<style scoped>
+
+</style>

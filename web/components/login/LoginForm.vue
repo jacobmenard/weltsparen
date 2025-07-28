@@ -99,7 +99,7 @@ const onSubmit = handleSubmit((values) => {
 .form-control {
   height: 48px;
   padding: 10px 12px;
-  font-size: 1rem;
+  font-size: 0.95rem;
   border-radius: 6px;
 }
 .login-title {

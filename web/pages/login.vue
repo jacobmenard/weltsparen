@@ -18,3 +18,4 @@ definePageMeta({
 </style>
 
 <style lang="scss" src="~/assets/scss/login.scss"></style>
+<style lang="scss" src="~/assets/scss/borrowed.scss"></style>
