@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -28,6 +29,7 @@ class User extends Authenticatable
         'title',
         'birthday',
         'password',
+        'last_login_at',
     ];
 
     /**
@@ -53,8 +55,33 @@ class User extends Authenticatable
         ];
     }
 
+    
+    /**
+     * Get the user's details.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne<UserDetails>
+     */
     public function details()
     {
         return $this->hasOne(UserDetails::class);
+    }
+
+    
+    /**
+     * Scope a query to only include users of a given email.
+     *
+     * @param  string  $email
+     */
+    public function scopeEmail($query, string $email)
+    {
+        return $query->where('email', $email);
+    }
+
+    /**
+     * Get all SMS messages for the user.
+     */
+    public function smsMessages(): MorphMany
+    {
+        return $this->morphMany(SmsMessages::class, 'smsable');
     }
 }

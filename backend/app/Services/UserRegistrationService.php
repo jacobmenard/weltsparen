@@ -8,6 +8,7 @@ use App\Http\Traits\ApiResponseTrait;
 use Illuminate\Validation\Rules\Enum;
 use App\Models\User;
 use App\Models\UsersDetails;
+use App\Models\SmsMessages;
 
 class UserRegistrationService
 {
@@ -15,6 +16,7 @@ class UserRegistrationService
 
     /**
      * Handle the first step of user registration.
+     * Email
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -61,7 +63,7 @@ class UserRegistrationService
         if (!$regToken || $regToken->expires_at < now()) {
             return $this->apiResponse(['errors' => ['token' => __('common.expired', ['field' => 'token'])]], false, 422);
         }
-        // check previous step
+        // check previous steps
         $data = json_decode($regToken->data, true);
         if (!isset($data['step_1'])) {
             return $this->apiResponse(['errors' => ['token' => __('common.missing-steps')]], false, 422);
@@ -107,7 +109,7 @@ class UserRegistrationService
         if (!$regToken || $regToken->expires_at < now()) {
             return $this->apiResponse(['errors' => ['token' => __('common.expired', ['field' => 'token'])]], false, 422);
         }
-        // check previous step
+        // check previous steps
         $data = json_decode($regToken->data, true);
         if (!(isset($data['step_1']) && isset($data['step_2']))) {
             return $this->apiResponse(['errors' => ['token' => __('common.missing-steps')]], false, 422);
@@ -157,7 +159,7 @@ class UserRegistrationService
         if (!$regToken || $regToken->expires_at < now()) {
             return $this->apiResponse(['errors' => ['token' => __('common.expired', ['field' => 'token'])]], false, 422);
         }
-        // check previous step
+        // check previous steps
         $data = json_decode($regToken->data, true);
         if (!(isset($data['step_1']) && isset($data['step_2']) && isset($data['step_3']))) {
             return $this->apiResponse(['errors' => ['token' => __('common.missing-steps')]], false, 422);
@@ -203,16 +205,115 @@ class UserRegistrationService
         if (!$regToken || $regToken->expires_at < now()) {
             return $this->apiResponse(['errors' => ['token' => __('common.expired', ['field' => 'token'])]], false, 422);
         }
-        // check previous step
+        // check previous steps
         $data = json_decode($regToken->data, true);
         if (!(isset($data['step_1']) && isset($data['step_2']) && isset($data['step_3']) && isset($data['step_4']))) {
             return $this->apiResponse(['errors' => ['token' => __('common.missing-steps')]], false, 422);
         }
 
+        $smsCode = str_pad(rand(1, 999999), 6, '0', STR_PAD_LEFT);
+
         // update registration token
         $data = json_decode($regToken->data, true);
         $data['step_5'] = [
             'mobile_number' => $validated['mobile_number'],
+            'verification_code' => $smsCode,
+        ];
+
+        // sending sms for verification
+        // Create SMS record
+        $regToken->smsMessages()->create([
+            'phone_number' => $validated['mobile_number'],
+            'message' => __('common.verification-code', ['code' => $smsCode]),
+            'verify_code' => $smsCode,
+            'type' => 'verification',
+            'status' => 'pending',
+        ]);
+
+        // send it here and confirm in the next form
+        // -----
+
+        $regToken->update([
+            'step' => 5,
+            'data' => json_encode($data),
+        ]);
+
+        return $this->apiResponse(['next_step' => 6, 'token' => $regToken->token]);
+    }
+
+    /**
+     * Handle the sixth step of user registration.
+     * Verification
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function handleStep6($request)
+    {
+        $validated = $this->apiValidate($request->all(), [
+            'reg_token' => 'required|exists:users_registrations,token',
+            'mobile_verification_code' => 'required|numeric',
+        ]);
+
+        // validate registration token
+        $regToken = UsersRegistrations::regToken($request->input('reg_token'))->first();
+        if (!$regToken || $regToken->expires_at < now()) {
+            return $this->apiResponse(['errors' => ['token' => __('common.expired', ['field' => 'token'])]], false, 422);
+        }
+        // check previous steps
+        $data = json_decode($regToken->data, true);
+        if (!(isset($data['step_1']) && isset($data['step_2']) && isset($data['step_3']) && isset($data['step_4']) && isset($data['step_5']))) {
+            return $this->apiResponse(['errors' => ['token' => __('common.missing-steps')]], false, 422);
+        }
+
+        // verify sms code
+        $smsMessages = $regToken->smsMessages()->verifyCode($validated['mobile_verification_code'])->type('verification')->status('pending')->first();
+        if (!$smsMessages) {
+            return $this->apiResponse(['errors' => ['token' => __('common.invalid-verification-code')]], false, 422);
+        }
+
+        $data = json_decode($regToken->data, true);
+        $data['step_6'] = [
+            'mobile_verification_code' => $validated['mobile_verification_code'],
+        ];
+
+        $regToken->update([
+            'step' => 6,
+            'data' => json_encode($data),
+        ]);
+
+        return $this->apiResponse(['next_step' => 7, 'token' => $regToken->token]);
+    }
+
+    /**
+     * Handle the seventh step of user registration.
+     * Password
+     *
+     * @param \Illuminate\Http\Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function handleStep7($request)
+    {
+        $validated = $this->apiValidate($request->all(), [
+            'reg_token' => 'required|exists:users_registrations,token',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        // validate registration token
+        $regToken = UsersRegistrations::regToken($request->input('reg_token'))->first();
+        if (!$regToken || $regToken->expires_at < now()) {
+            return $this->apiResponse(['errors' => ['token' => __('common.expired', ['field' => 'token'])]], false, 422);
+        }
+        // check previous steps
+        $data = json_decode($regToken->data, true);
+        if (!(isset($data['step_1']) && isset($data['step_2']) && isset($data['step_3']) && isset($data['step_4']) && isset($data['step_5']) && isset($data['step_6']))) {
+            return $this->apiResponse(['errors' => ['token' => __('common.missing-steps')]], false, 422);
+        }
+
+        // update registration token
+        $data = json_decode($regToken->data, true);
+        $data['step_7'] = [
+            'password' => '********',
         ];
         $details = [
             'email' => $data['step_1']['email'],
@@ -221,12 +322,17 @@ class UserRegistrationService
             'mobile_number' => $data['step_5']['mobile_number'],
         ];
         $regToken->update([
-            'step' => 5,
+            'step' => 6,
             'data' => json_encode($data),
         ]);
 
+        // re-check if email already exists
+        if (User::email($details['email'])->exists()) {
+            return $this->apiResponse(['errors' => ['email' => __('common.exists', ['field' => 'Email'])]], false, 422);
+        }
+
         // save user
-        $user = $this->createUser($regToken->token);
+        $user = $this->createUser($regToken->token, $validated['password']);
 
         if($user->id) {
             return $this->apiResponse(['complete' => true, 'next_step' => -1, 'account' => $details]);
@@ -236,11 +342,11 @@ class UserRegistrationService
     }
 
     /**
-     * Create a new user record out of the $regtoken data
+     * Create a new user record out of the $regToken data
      * @param string $token
      * @return \App\Models\User
      */
-    protected function createUser($token) : \App\Models\User
+    protected function createUser($token, $password) : \App\Models\User
     {
         $user = new User();
 
@@ -258,9 +364,7 @@ class UserRegistrationService
                 'salutation'            => $data['step_2']['salutation'],
                 'title'                 => $data['step_2']['title'],
                 'birthday'              => $data['step_2']['birthday'],
-
-                // xxx: unable to find the password in the form?
-                'password' => \Hash::make('password'),
+                'password'              => \Hash::make($password),
             ]);
 
             UsersDetails::create([

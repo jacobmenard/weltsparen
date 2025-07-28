@@ -6,6 +6,7 @@
 - `php artisan key:generate`
 - `php artisan migrate`
 - `php artisan db:seed CountriesSeeder`
+- `php artisan scribe:generate`
 
 ### BACKEND - Common .env file customizations
 
