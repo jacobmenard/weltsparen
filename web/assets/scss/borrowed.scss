@@ -205,3 +205,11 @@
   display: inline-block;
   vertical-align: middle;
 }
+
+@media (max-width: 899.95px) {
+  .daChsy {
+    grid-template-columns: auto;
+    row-gap: 12px;
+    padding: 16px 22px;
+  }
+}
