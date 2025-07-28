@@ -14,6 +14,11 @@ Route::get('/users/register-config',                                [UsersContro
 // Registration submission (multi-step)
 Route::post('/users/register',                                      [UsersController::class, 'register']);
 
+// Reset Password config (data for reset password form)
+Route::get('/users/reset-password-config',                         [UsersController::class, 'resetPasswordConfig']);
+Route::post('/users/reset-password-email',                         [UsersController::class, 'resetPasswordEmail']);
+Route::post('/users/reset-password',                               [UsersController::class, 'resetPasswordProcess']);
+
 // Authenticated
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/users/logout',                                    [UsersController::class, 'logout']);

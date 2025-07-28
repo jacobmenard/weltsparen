@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Services\UserRegistrationService;
 use App\Http\Traits\ApiResponseTrait;
+use Password;
 
 class UsersController extends Controller
 {
@@ -80,7 +81,6 @@ class UsersController extends Controller
         return $this->apiResponse(['translations' => __('user.registration'), 'countries' => $countries, 'reg_token' => $token], true, 200);
     }
 
-
     /**
      * Registration (Multi-Steps)
      * 
@@ -119,4 +119,85 @@ class UsersController extends Controller
         }
     }
 
+    /**
+     * Reset Password (Configuration)
+     * 
+     * All needed data, form details, field options for user reset password form
+     * @group Users
+     * @subgroup Reset Password
+     * @responseField data.translations Translations for user registration form
+     * @response { "success": true, "data": ... }
+     */
+    public function resetPasswordConfig(Request $request)
+    {
+        return $this->apiResponse(['translations' => __('user.reset-password')], true, 200);
+    }
+
+    /**
+     * Reset Password (Email)
+     * 
+     * Submitting email for a reset password
+     * @group Users
+     * @subgroup Reset Password
+     * @responseField message Reset password message
+     * @responseField email User email address
+     * @response { "success": true, "data": ... }
+     */
+    public function resetPasswordEmail(Request $request)
+    {
+        $validated = $this->apiValidate($request->all(), [
+            'email' => 'required|email',
+        ]);
+
+        $returnToken = '';
+
+        $status = Password::broker()->sendResetLink(['email' => $validated['email']],
+            function ($user, $token) use (&$returnToken) {
+                $returnToken = $token;
+            }
+        );
+
+        if($status === Password::RESET_LINK_SENT) {
+            // 'token' => $returnToken - just in case
+            return $this->apiResponse(['message' => __($status), 'email' => $validated['email'],'token' => $returnToken], true, 200);
+        }
+
+        return $this->apiResponse(['errors' => __($status)], false, 400);
+    }
+    /**
+     * Reset Password (Process)
+     * 
+     * Resetting password from token emailed to user
+     * @group Users
+     * @subgroup Reset Password
+     * @responseField token Reset token from a link emailed to the user
+     * @responseField email User email address
+     * @responseField password New password minimum 8 characters
+     * @responseField password_confirmation Password confirmation
+     * @response { "success": true, "data": ... }
+     */
+    public function resetPasswordProcess(Request $request)
+    {
+        $validated = $this->apiValidate($request->all(), [
+            'email' => 'required|email',
+            'token' => 'required|string',
+            'password' => 'required|string|min:8|confirmed',
+            'password_confirmation' => 'required|string',
+        ]);
+
+        // Call the Password broker's reset method
+        $status = Password::broker()->reset( $validated, function ($user, $password) {
+                $user->forceFill(['password' => bcrypt($password)])->save();
+                // Generate new remember token
+                $user->setRememberToken(\Str::random(60));
+                $user->save();
+            }
+        );
+
+        if($status === Password::PASSWORD_RESET) {
+            return $this->apiResponse(['message' => __($status), 'email' => $validated['email']], true, 200);
+        }
+
+        return $this->apiResponse(['errors' => __($status)], false, 400);
+    }
 }

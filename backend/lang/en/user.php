@@ -111,5 +111,17 @@ return [
         'password' => 'Password',
         'forgot_password' => 'Forgot password?',
         'create_account' => 'Create account',
-    ]
+    ],
+    'reset-password' => [
+        'title' => 'Have you forgotten your password?',
+        'sub_title' => 'No problem!',
+        'desc' => 'Enter your email address and we will send you instructions on how to reset your password.',
+        'email' => 'Email address',
+        'send' => 'Continue',
+        'back_link' => 'Back to registration',
+        'sent_message' => 'We have sent you an email',
+        'sent_desc' => 'Please check your inbox, including the spam folder if necessary, and follow the instructions to reset your password.',
+        'resend' => 'Resend',
+        'didnt_receive' => 'Didn\'t receive the email?',        
+    ],
 ];
